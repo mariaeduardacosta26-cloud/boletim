@@ -8,47 +8,49 @@
 </head>
 <body>
 
-  <!-- Cabeçalho principal com título e subtítulo -->
+  <!-- Cabeçalho minimalista -->
   <header>
-    <div class="container">
-      <h1>Boletim Digital</h1>
-      <p class="subtitulo">9º Ano — Estudante Exemplo</p>
+    <div class="container header-content">
+      <div>
+        <h1>Boletim Digital</h1>
+        <p class="subtitulo">9º Ano — Estudante Exemplo</p>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <!-- Área de cards com resumos do estudante -->
+    <!-- Cards minimalistas -->
     <section class="cards-grid">
       <div class="card">
-        <h3>Média Geral</h3>
+        <span class="card-label">Média Geral</span>
         <p id="media-geral" class="card-valor">—</p>
       </div>
 
       <div class="card">
-        <h3>Total de Faltas</h3>
+        <span class="card-label">Total de Faltas</span>
         <p id="total-faltas" class="card-valor">—</p>
       </div>
 
       <div class="card">
-        <h3>Bom Desempenho</h3>
+        <span class="card-label">Bom Desempenho</span>
         <p id="qtd-bom-desempenho" class="card-valor">—</p>
       </div>
 
       <div class="card">
-        <h3>Precisam de Atenção</h3>
+        <span class="card-label">Precisa de Atenção</span>
         <p id="qtd-atencao" class="card-valor">—</p>
       </div>
 
       <div class="card">
-        <h3>Frequência</h3>
+        <span class="card-label">Frequência</span>
         <p id="frequencia" class="card-valor">—</p>
         <span id="frequencia-status" class="card-status"></span>
       </div>
     </section>
 
-    <!-- Tabela principal com as notas das disciplinas -->
+    <!-- Tabela limpa e funcional -->
     <section class="tabela-container">
-      <h2>Notas por Disciplina</h2>
+      <h2>Disciplinas</h2>
       <div class="tabela-wrapper">
         <table>
           <thead>
@@ -63,14 +65,13 @@
             </tr>
           </thead>
           <tbody id="tabela-corpo">
-            <!-- As 15 linhas das disciplinas serão inseridas via JavaScript -->
+            <!-- As disciplinas serão inseridas aqui via JavaScript -->
           </tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <!-- Inclusão do arquivo JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
