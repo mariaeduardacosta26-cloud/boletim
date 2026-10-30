@@ -1,0 +1,188 @@
+/* Importação de fonte moderna */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Variáveis de cores e estilos padrão */
+:root {
+  --cor-fundo: #FDFBF7;
+  --cor-card-fundo: #FFFFFF;
+  --cor-principal: #C4A484; /* Marrom claro */
+  --cor-secundaria: #4A3B32; /* Marrom escuro */
+  --cor-texto: #2D241E;
+  --cor-texto-suave: #7A6B63;
+  --cor-borda: #EAE3DC;
+  
+  --cor-sucesso: #2E7D32;
+  --cor-sucesso-fundo: #E8F5E9;
+  --cor-alerta: #C62828;
+  --cor-alerta-fundo: #FFEBEE;
+  
+  --fonte-principal: 'Inter', sans-serif;
+  --sombra-card: 0 4px 12px rgba(74, 59, 50, 0.08);
+  --raio-borda: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fonte-principal);
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Cabeçalho */
+header {
+  background-color: var(--cor-secundaria);
+  color: #FFFFFF;
+  padding: 30px 0;
+  margin-bottom: 30px;
+  border-bottom: 4px solid var(--cor-principal);
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.subtitulo {
+  color: var(--cor-principal);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Grid de Cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 35px;
+}
+
+.card {
+  background-color: var(--cor-card-fundo);
+  padding: 20px;
+  border-radius: var(--raio-borda);
+  border: 1px solid var(--cor-borda);
+  box-shadow: var(--sombra-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3 {
+  font-size: 0.85rem;
+  color: var(--cor-texto-suave);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.card-valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cor-secundaria);
+}
+
+.card-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cor-sucesso);
+  margin-top: 4px;
+}
+
+/* Tabela Responsiva */
+.tabela-container {
+  background-color: var(--cor-card-fundo);
+  padding: 24px;
+  border-radius: var(--raio-borda);
+  border: 1px solid var(--cor-borda);
+  box-shadow: var(--sombra-card);
+  margin-bottom: 40px;
+}
+
+.tabela-container h2 {
+  font-size: 1.3rem;
+  color: var(--cor-secundaria);
+  margin-bottom: 20px;
+}
+
+.tabela-wrapper {
+  overflow-x: auto; /* Permite rolar a tabela em telas pequenas */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  background-color: #F7F3EE;
+  color: var(--cor-secundaria);
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: 0.95rem;
+}
+
+tr:hover {
+  background-color: #FAF7F2;
+}
+
+/* Badges de Situação */
+.situacao-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.situacao-bom {
+  background-color: var(--cor-sucesso-fundo);
+  color: var(--cor-sucesso);
+}
+
+.situacao-atencao {
+  background-color: var(--cor-alerta-fundo);
+  color: var(--cor-alerta);
+}
+
+.situacao-indisponivel {
+  background-color: #F0EDED;
+  color: var(--cor-texto-suave);
+}
+
+/* Responsividade para celular */
+@media (max-width: 600px) {
+  header {
+    padding: 20px 0;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tabela-container {
+    padding: 16px;
+  }
+}
