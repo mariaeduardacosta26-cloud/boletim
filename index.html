@@ -8,69 +8,120 @@
 </head>
 <body>
 
-  <!-- Cabeçalho minimalista -->
-  <header>
-    <div class="container header-content">
-      <div>
-        <h1>Boletim Digital</h1>
-        <p class="subtitulo">9º Ano — Estudante Exemplo</p>
-      </div>
+  <!-- Área de Acesso (PIN) -->
+  <div id="area-login" class="login-container">
+    <div class="login-box">
+      <h2>Acesso ao Boletim Digital</h2>
+      <p class="login-info">Turma: <strong>9B</strong> | Chamada: <strong>21</strong></p>
+      
+      <form id="form-login">
+        <div class="campo-grupo">
+          <label for="pin-input">PIN de Acesso:</label>
+          <input type="password" id="pin-input" placeholder="Digite seu PIN" required autocomplete="off">
+        </div>
+        <button type="submit" id="btn-entrar" class="btn-primary">Entrar</button>
+      </form>
+      <div id="login-mensagem" class="mensagem-status"></div>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <!-- Cards minimalistas -->
-    <section class="cards-grid">
-      <div class="card">
-        <span class="card-label">Média Geral</span>
-        <p id="media-geral" class="card-valor">—</p>
+  <!-- Conteúdo Principal do Boletim (Inicialmente Oculto) -->
+  <div id="conteudo-boletim" style="display: none;">
+    <!-- Cabeçalho minimalista -->
+    <header>
+      <div class="container header-content">
+        <div>
+          <h1>Boletim Digital</h1>
+          <p class="subtitulo">9º Ano — Turma 9B — Nº 21</p>
+        </div>
+        <div>
+          <button id="btn-alterar-dados" class="btn-primary">Alterar dados</button>
+        </div>
       </div>
+    </header>
 
-      <div class="card">
-        <span class="card-label">Total de Faltas</span>
-        <p id="total-faltas" class="card-valor">—</p>
-      </div>
+    <main class="container">
+      <!-- Cards minimalistas -->
+      <section class="cards-grid">
+        <div class="card">
+          <span class="card-label">Média Geral</span>
+          <p id="media-geral" class="card-valor">—</p>
+        </div>
 
-      <div class="card">
-        <span class="card-label">Bom Desempenho</span>
-        <p id="qtd-bom-desempenho" class="card-valor">—</p>
-      </div>
+        <div class="card">
+          <span class="card-label">Total de Faltas</span>
+          <p id="total-faltas" class="card-valor">—</p>
+        </div>
 
-      <div class="card">
-        <span class="card-label">Precisa de Atenção</span>
-        <p id="qtd-atencao" class="card-valor">—</p>
-      </div>
+        <div class="card">
+          <span class="card-label">Bom Desempenho</span>
+          <p id="qtd-bom-desempenho" class="card-valor">—</p>
+        </div>
 
-      <div class="card">
-        <span class="card-label">Frequência</span>
-        <p id="frequencia" class="card-valor">—</p>
-        <span id="frequencia-status" class="card-status"></span>
-      </div>
-    </section>
+        <div class="card">
+          <span class="card-label">Precisa de Atenção</span>
+          <p id="qtd-atencao" class="card-valor">—</p>
+        </div>
 
-    <!-- Tabela limpa e funcional -->
-    <section class="tabela-container">
-      <h2>Disciplinas</h2>
-      <div class="tabela-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Disciplina</th>
-              <th>1º Tri</th>
-              <th>2º Tri</th>
-              <th>3º Tri</th>
-              <th>Média</th>
-              <th>Faltas</th>
-              <th>Situação</th>
-            </tr>
-          </thead>
-          <tbody id="tabela-corpo">
-            <!-- As disciplinas serão inseridas aqui via JavaScript -->
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+        <div class="card">
+          <span class="card-label">Frequência</span>
+          <p id="frequencia" class="card-valor">—</p>
+          <span id="frequencia-status" class="card-status"></span>
+        </div>
+      </section>
+
+      <!-- Painel de Edição de Notas e Faltas (Oculto por padrão) -->
+      <section id="painel-edicao" class="edicao-container" style="display: none;">
+        <h2>Editar Notas e Faltas</h2>
+        <div id="edicao-mensagem" class="mensagem-status"></div>
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>Tri 1 (Nota)</th>
+                <th>Tri 2 (Nota)</th>
+                <th>Tri 3 (Nota)</th>
+                <th>Tri 1 (Faltas)</th>
+                <th>Tri 2 (Faltas)</th>
+                <th>Tri 3 (Faltas)</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-edicao-corpo">
+              <!-- Linhas editáveis via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <div class="edicao-acoes">
+          <button id="btn-salvar-dados" class="btn-primary">Salvar alterações</button>
+          <button id="btn-cancelar-edicao" class="btn-secundario">Cancelar</button>
+        </div>
+      </section>
+
+      <!-- Tabela limpa e funcional -->
+      <section class="tabela-container">
+        <h2>Disciplinas</h2>
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>1º Tri</th>
+                <th>2º Tri</th>
+                <th>3º Tri</th>
+                <th>Média</th>
+                <th>Faltas</th>
+                <th>Situação</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-corpo">
+              <!-- As disciplinas serão inseridas aqui via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
