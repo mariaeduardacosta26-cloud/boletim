@@ -30,6 +30,11 @@ const dadosDisciplinasPadrao = [
 // Estado atual dos dados exibidos na página
 let dadosDisciplinasAtuais = [];
 
+// Variáveis para guardar as instâncias dos gráficos (Chart.js)
+let graficoMedias = null;
+let graficoEvolucao = null;
+let graficoFaltas = null;
+
 // Função que normaliza qualquer tipo de entrada para a escala de 0 a 10 (Dados antigos/iniciais)
 function normalizarNota(valor) {
   if (valor === null || valor === undefined || valor === "") {
@@ -89,6 +94,221 @@ function validarFaltaEditada(valor) {
   }
 
   return { valido: true, valor: numero };
+}
+
+// --- FUNÇÕES EXCLUSIVAS DE LEITURA PARA OS GRÁFICOS ---
+
+function atualizarGraficoMedias() {
+  const canvas = document.getElementById("graficoMediasDisciplinas");
+  if (!canvas) return;
+
+  if (graficoMedias) {
+    graficoMedias.destroy();
+  }
+
+  const labels = [];
+  const dados = [];
+
+  dadosDisciplinasAtuais.forEach((item) => {
+    labels.push(item.disciplina);
+
+    const n1 = normalizarNota(item.tri1);
+    const n2 = normalizarNota(item.tri2);
+    const n3 = normalizarNota(item.tri3);
+
+    const notasValidas = [n1, n2, n3].filter((n) => n !== null);
+
+    if (notasValidas.length > 0) {
+      const soma = notasValidas.reduce((acc, curr) => acc + curr, 0);
+      dados.push(Number((soma / notasValidas.length).toFixed(1)));
+    } else {
+      dados.push(null);
+    }
+  });
+
+  const ctx = canvas.getContext("2d");
+  graficoMedias = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Média",
+        data: dados,
+        backgroundColor: "#7C3AED",
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          min: 0,
+          max: 10,
+          ticks: { stepSize: 2 }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const val = context.raw;
+              if (val === null || val === undefined) return "Sem nota";
+              return "Média: " + String(val).replace(".", ",");
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function atualizarGraficoEvolucao() {
+  const canvas = document.getElementById("graficoEvolucaoTrimestres");
+  if (!canvas) return;
+
+  if (graficoEvolucao) {
+    graficoEvolucao.destroy();
+  }
+
+  const somaTri = [0, 0, 0];
+  const qtdTri = [0, 0, 0];
+
+  dadosDisciplinasAtuais.forEach((item) => {
+    const n1 = normalizarNota(item.tri1);
+    const n2 = normalizarNota(item.tri2);
+    const n3 = normalizarNota(item.tri3);
+
+    if (n1 !== null) { somaTri[0] += n1; qtdTri[0]++; }
+    if (n2 !== null) { somaTri[1] += n2; qtdTri[1]++; }
+    if (n3 !== null) { somaTri[2] += n3; qtdTri[2]++; }
+  });
+
+  const mediasEvolucao = [
+    qtdTri[0] > 0 ? Number((somaTri[0] / qtdTri[0]).toFixed(1)) : null,
+    qtdTri[1] > 0 ? Number((somaTri[1] / qtdTri[1]).toFixed(1)) : null,
+    qtdTri[2] > 0 ? Number((somaTri[2] / qtdTri[2]).toFixed(1)) : null
+  ];
+
+  const ctx = canvas.getContext("2d");
+  graficoEvolucao = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["1º Tri", "2º Tri", "3º Tri"],
+      datasets: [{
+        label: "Média Geral",
+        data: mediasEvolucao,
+        borderColor: "#7C3AED",
+        backgroundColor: "rgba(124, 58, 237, 0.1)",
+        fill: true,
+        tension: 0.3,
+        pointRadius: 5,
+        pointBackgroundColor: "#7C3AED"
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          min: 0,
+          max: 10,
+          ticks: { stepSize: 2 }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const val = context.raw;
+              if (val === null || val === undefined) return "Sem notas no trimestre";
+              return "Média: " + String(val).replace(".", ",");
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function atualizarGraficoFaltas() {
+  const canvas = document.getElementById("graficoFaltasTrimestres");
+  if (!canvas) return;
+
+  if (graficoFaltas) {
+    graficoFaltas.destroy();
+  }
+
+  let f1 = 0;
+  let f2 = 0;
+  let f3 = 0;
+
+  dadosDisciplinasAtuais.forEach((item) => {
+    const arrFaltas = Array.isArray(item.faltas) ? item.faltas : [0, 0, 0];
+    f1 += Number(arrFaltas[0] || 0);
+    f2 += Number(arrFaltas[1] || 0);
+    f3 += Number(arrFaltas[2] || 0);
+  });
+
+  const totalFaltasAcc = f1 + f2 + f3;
+  const LIMITE_REFERENCIA_INTERNA = 350;
+
+  const cardFaltas = document.getElementById("card-faltas-grafico");
+  const estadoFaltasContainer = document.getElementById("estadoFaltas");
+
+  if (cardFaltas && estadoFaltasContainer) {
+    if (totalFaltasAcc >= LIMITE_REFERENCIA_INTERNA) {
+      cardFaltas.classList.add("perigo-card");
+      estadoFaltasContainer.innerHTML = '<span class="badge-perigo">Perigo</span>';
+    } else {
+      cardFaltas.classList.remove("perigo-card");
+      estadoFaltasContainer.innerHTML = "";
+    }
+  }
+
+  const ctx = canvas.getContext("2d");
+  graficoFaltas = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["1º Tri", "2º Tri", "3º Tri"],
+      datasets: [{
+        label: "Faltas",
+        data: [f1, f2, f3],
+        backgroundColor: "#DC2626",
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 5 }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.raw + " faltas";
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Função unificada para atualizar a camada visual de gráficos
+function atualizarGraficos() {
+  atualizarGraficoMedias();
+  atualizarGraficoEvolucao();
+  atualizarGraficoFaltas();
 }
 
 // Função principal para montar a tabela e calcular os resumos
@@ -191,6 +411,9 @@ function renderizarBoletim() {
 
   document.getElementById("frequencia").textContent = "92%";
   document.getElementById("frequencia-status").textContent = "Frequência adequada";
+
+  // Atualização dos gráficos após término da renderização do boletim
+  atualizarGraficos();
 }
 
 // Renderiza a tabela do painel de edição
